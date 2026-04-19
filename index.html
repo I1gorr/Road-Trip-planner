@@ -3,78 +3,168 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HERE Route Optimizer</title>
+  <title>Smart Road Trip Planner</title>
   <link rel="stylesheet" href="https://unpkg.com/normalize.css/normalize.css">
   <link rel="stylesheet" href="styles.css" />
   <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" charset="utf-8"></script>
   <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" charset="utf-8"></script>
   <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" charset="utf-8"></script>
   <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" charset="utf-8"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #0f172a;
-      color: #e2e8f0;
-    }
-    .container {
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-    }
-    label, select, input, button {
-      display: block;
-      width: 100%;
-      margin-bottom: 10px;
-      font-size: 1rem;
-    }
-    input, select {
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #334155;
-      background: #1e293b;
-      color: #f8fafc;
-    }
-    button {
-      background-color: #0ea5e9;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    button:hover {
-      background-color: #0369a1;
-    }
-  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Smart Route Optimizer</h1>
-    <label for="start">Start Location:</label>
-    <input type="text" id="start" placeholder="e.g. VIT Vellore" />
-
-    <label for="end">End Location:</label>
-    <input type="text" id="end" placeholder="e.g. Marina Beach" />
-
-    <label for="preference">Preference:</label>
-    <select id="preference">
-      <option value="restaurant">Restaurants</option>
-      <option value="hospital">Hospitals</option>
-      <option value="atm">ATMs</option>
-      <option value="petrol-station">Petrol Stations</option>
-    </select>
-
-    <button onclick="optimizeRoute()">Find Optimized Route</button>
+  <!-- Loading overlay for async operations -->
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="spinner"></div>
+    <p>Planning your trip...</p>
   </div>
 
-  <!-- Map and dynamic UI -->
-  <div id="mapContainer" style="width: 100%; height: 600px;"></div>
-  <div id="distanceDisplay">Total Distance: Calculating...</div>
-  <div id="segmentDistance">Segment Distance: Calculating...</div>
-  <button id="nextButton">Next</button>
-  <button id="addWaypointButton">+</button>
-  <button id="optimizeRouteButton">Optimize Route</button>
+  <!-- Main app container -->
+  <main class="app-container">
+    <!-- Header with branding -->
+    <header class="app-header">
+      <h1 class="app-title">✨ Smart Road Trip Planner</h1>
+      <p class="app-subtitle">Plan your journey with style</p>
+    </header>
+
+    <!-- Left sidebar with input controls -->
+    <aside class="sidebar">
+      <section class="input-section">
+        <h2>Trip Details</h2>
+        
+        <div class="input-group">
+          <label for="startInput" class="input-label">Starting Point</label>
+          <input 
+            type="text" 
+            id="startInput" 
+            class="input-field"
+            placeholder="e.g., VIT Vellore" 
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="endInput" class="input-label">Destination</label>
+          <input 
+            type="text" 
+            id="endInput" 
+            class="input-field"
+            placeholder="e.g., Marina Beach" 
+            autocomplete="off"
+          />
+        </div>
+
+        <button id="openPreferencesBtn" class="btn btn-primary">
+          🎯 Select Your Preferences
+        </button>
+      </section>
+
+      <!-- Route summary card -->
+      <section id="routeSummary" class="route-summary hidden">
+        <h3>Route Summary</h3>
+        <div class="summary-item">
+          <span class="summary-label">Total Distance:</span>
+          <span id="totalDistance" class="summary-value">--</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Estimated Time:</span>
+          <span id="estimatedTime" class="summary-value">--</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Waypoints:</span>
+          <span id="waypointCount" class="summary-value">0</span>
+        </div>
+        <button id="clearRouteBtn" class="btn btn-secondary btn-small">Clear Route</button>
+      </section>
+
+      <!-- Waypoints list -->
+      <section id="waypointsList" class="waypoints-section hidden">
+        <h3>Stops Along Your Route</h3>
+        <ul id="waypointsContainer" class="waypoints-list"></ul>
+      </section>
+    </aside>
+
+    <!-- Map container - takes up remaining space -->
+    <div id="mapContainer" class="map-container"></div>
+  </main>
+
+  <!-- Preference Selection Modal -->
+  <div id="preferencesModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>What Would You Like to Stop For?</h2>
+        <button id="closeModalBtn" class="modal-close">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-subtitle">Select all that apply:</p>
+        
+        <div class="preferences-grid">
+          <!-- Food & Dining -->
+          <label class="preference-checkbox">
+            <input type="checkbox" name="preferences" value="restaurant" />
+            <span class="preference-icon">🍽️</span>
+            <span class="preference-label">Restaurants & Cafes</span>
+          </label>
+
+          <!-- Gas & Fuel -->
+          <label class="preference-checkbox">
+            <input type="checkbox" name="preferences" value="petrol-station" />
+            <span class="preference-icon">⛽</span>
+            <span class="preference-label">Gas Stations</span>
+          </label>
+
+          <!-- Medical & Health -->
+          <label class="preference-checkbox">
+            <input type="checkbox" name="preferences" value="hospital" />
+            <span class="preference-icon">🏥</span>
+            <span class="preference-label">Medical Services</span>
+          </label>
+
+          <!-- Banking & ATM -->
+          <label class="preference-checkbox">
+            <input type="checkbox" name="preferences" value="atm" />
+            <span class="preference-icon">🏦</span>
+            <span class="preference-label">ATMs & Banks</span>
+          </label>
+
+          <!-- Hotels & Lodging -->
+          <label class="preference-checkbox">
+            <input type="checkbox" name="preferences" value="hotel" />
+            <span class="preference-icon">🏨</span>
+            <span class="preference-label">Hotels & Lodging</span>
+          </label>
+
+          <!-- Shopping -->
+          <label class="preference-checkbox">
+            <input type="checkbox" name="preferences" value="shopping" />
+            <span class="preference-icon">🛍️</span>
+            <span class="preference-label">Shopping Malls</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="confirmPreferencesBtn" class="btn btn-primary btn-large">
+          Confirm & Plan Route
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info overlay (top-right on map) -->
+  <div id="mapInfoOverlay" class="map-info-overlay hidden">
+    <div class="info-item">
+      <span class="info-label">Distance:</span>
+      <span id="currentDistance">--</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Waypoints:</span>
+      <span id="waypointsInfo">0</span>
+    </div>
+  </div>
+
+  <!-- Toast notification area -->
+  <div id="toastContainer" class="toast-container"></div>
 
   <script type="module" src="script.js"></script>
 </body>
