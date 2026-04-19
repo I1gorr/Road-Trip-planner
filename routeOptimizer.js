@@ -128,10 +128,10 @@ export async function drawRoute(start, end) {
         const linestring = H.geo.LineString.fromFlexiblePolyline(route.sections[0].polyline);
 
         // Create a visual line on the map to show the route
-        // Blue color (#0ea5e9 - our primary color) with nice thickness
+        // Grey color (#555555) with clean thickness
         routePolyline = new H.map.Polyline(linestring, {
           style: {
-            strokeColor: '#0ea5e9',
+            strokeColor: '#555555',
             lineWidth: 5,
             lineDash: [0]
           }
@@ -232,27 +232,15 @@ export async function getPOIsAlongRoute(route, categories) {
 }
 
 /**
- * Create a simple but visually distinct marker for different POI types
- * Colors help users quickly identify what type of stop this is
+ * Create a simple marker for different POI types
+ * Uses a clean, minimal design with subtle styling
  */
 function createMarkerIcon(category) {
-  // Map categories to emoji/colors for quick visual identification
-  const iconMap = {
-    restaurant: '🍽️',
-    'petrol-station': '⛽',
-    hospital: '🏥',
-    atm: '🏦',
-    hotel: '🏨',
-    shopping: '🛍️'
-  };
-
-  const emoji = iconMap[category] || '📍';
-  
-  // Create a simple SVG icon with the emoji
+  // Simple SVG circle marker for all categories
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-      <circle cx="16" cy="16" r="15" fill="#0ea5e9" stroke="white" stroke-width="2"/>
-      <text x="16" y="20" text-anchor="middle" font-size="18">${emoji}</text>
+      <circle cx="16" cy="16" r="15" fill="#555555" stroke="#f5f5f5" stroke-width="2"/>
+      <circle cx="16" cy="16" r="7" fill="#f5f5f5"/>
     </svg>
   `;
 

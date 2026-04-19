@@ -1,45 +1,34 @@
-# 🚗 Smart Road Trip Planner
+# Smart Road Trip Planner
 
-A modern, professional-grade web application for planning road trips with smart waypoint suggestions based on user preferences. Built with clean architecture, smooth animations, and an intuitive user interface.
+A modern, professional-grade web application for planning road trips with smart waypoint suggestions based on user preferences. Built with clean architecture, smooth animations, and an intuitive minimalist user interface.
 
-## ✨ Features
+## Features
 
-### 🎯 Interactive Preference Selection
-- Multi-select preference modal with 6 categories:
-  - 🍽️ Restaurants & Cafes
-  - ⛽ Gas Stations
-  - 🏥 Medical Services
-  - 🏦 ATMs & Banks
-  - 🏨 Hotels & Lodging
-  - 🛍️ Shopping Malls
-- Visual feedback with checkbox styling and emoji icons
-- Flexible selection - users can choose any combination
+### Interactive Preference Selection
+- Multi-select preference modal with 6 categories
+- Clean, minimal aesthetic
+- Visual feedback on selection
+- Smooth interaction patterns
 
-### 🗺️ Smart Route Optimization
+### Smart Route Optimization
 - Real-time route calculation between two locations
 - Automatic POI (Point of Interest) discovery along the route
 - Intelligent waypoint sampling to avoid API spam
 - Parallel API requests for faster performance
 
-### 📊 Route Summary & Statistics
+### Route Summary & Statistics
 - Total distance in kilometers
 - Estimated travel time in hours
 - Waypoint count with detailed list
 - Organized waypoint display with categories and distances
 
-### 🎨 Professional UI/UX
-- Modern gradient design with carefully chosen color palette
+### Professional UI/UX
+- Minimalist design with black and grey palette
 - Smooth CSS transitions and animations for fluid interactions
 - Loading states with animated spinner
-- Toast notifications for user feedback (success, error, info)
-- Responsive layout (desktop-first, mobile-ready)
+- Toast notifications for user feedback
+- Responsive layout
 - Semantic HTML structure
-
-### ⚡ Performance Optimizations
-- Debounced API calls to prevent request spamming
-- Parallel geocoding and routing requests
-- Lazy DOM updates to minimize reflows
-- Efficient event delegation
 
 ## 🏗️ Architecture
 
@@ -96,13 +85,13 @@ Why: HERE Maps API has rate limits, and this saves bandwidth and money.
 
 | Decision | Why |
 |----------|-----|
-| **Gradient UI + Animations** | Modern aesthetics improve perceived performance and user delight |
+| **Minimalist Black & Grey** | Clean aesthetic improves focus on content, reduces visual fatigue |
 | **Modal for Preferences** | More space to show all options with better UX than dropdown |
 | **Multi-select vs Single** | Flexibility - users might want both food AND gas stations |
 | **Toast Notifications** | Non-intrusive feedback that doesn't block the map view |
 | **Sidebar Layout** | Keeps controls visible while showing the full map for context |
-| **CSS Variables (color scheme)** | Easy dark mode in future; currently using dark theme for modern look |
-| **SVG Markers for POIs** | Clean, scalable, emoji support for visual variety |
+| **No Decorative Elements** | Pure minimalism focuses user attention on the route |
+| **SVG Markers for POIs** | Clean, scalable design elements |
 | **Parallel Requests** | Faster perceived performance (geocode start & end simultaneously) |
 
 ## 🚀 Getting Started

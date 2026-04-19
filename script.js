@@ -245,13 +245,13 @@ function displayWaypoints(waypoints) {
     const listItem = document.createElement('li');
     listItem.className = 'waypoint-item';
     
-    // Format the waypoint with category emoji, name, and distance
-    const categoryEmoji = getCategoryEmoji(waypoint.category);
+    // Format the waypoint with category label, name, and distance
+    const categoryLabel = getCategoryLabel(waypoint.category);
     const distanceText = waypoint.distance ? ` (${(waypoint.distance / 1000).toFixed(1)} km)` : '';
     
     listItem.innerHTML = `
-      <span class="waypoint-name">${categoryEmoji} ${waypoint.name}</span>
-      <span class="waypoint-distance">${waypoint.category}${distanceText}</span>
+      <span class="waypoint-name">${waypoint.name}</span>
+      <span class="waypoint-distance">${categoryLabel}${distanceText}</span>
     `;
 
     // Add slight delay to each item for a cascading animation effect
@@ -262,19 +262,19 @@ function displayWaypoints(waypoints) {
 }
 
 /**
- * Get an emoji to represent each POI category
- * Helps users quickly scan and understand what each stop offers
+ * Get a label to represent each POI category
+ * Helps users quickly identify what each stop offers
  */
-function getCategoryEmoji(category) {
-  const emojiMap = {
-    'restaurant': '🍽️',
-    'petrol-station': '⛽',
-    'hospital': '🏥',
-    'atm': '🏦',
-    'hotel': '🏨',
-    'shopping': '🛍️'
+function getCategoryLabel(category) {
+  const labelMap = {
+    'restaurant': 'Restaurants & Cafes',
+    'petrol-station': 'Gas Stations',
+    'hospital': 'Medical Services',
+    'atm': 'Banks & ATMs',
+    'hotel': 'Hotels & Lodging',
+    'shopping': 'Shopping Malls'
   };
-  return emojiMap[category] || '📍';
+  return labelMap[category] || category;
 }
 
 /**
@@ -353,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
   elements.startInput.focus();
 
   // Show a welcome message
-  showToast('Welcome to Smart Road Trip Planner! 🚗', 'info');
+  showToast('Welcome to Smart Road Trip Planner', 'info');
 });
 
 /**
